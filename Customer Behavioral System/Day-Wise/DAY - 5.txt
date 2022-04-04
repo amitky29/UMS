@@ -1,0 +1,46 @@
+3) Find State & City wise Min,MAX & Avg purchase value wise -  Annually   - File text-format, CSV 
+Note: “Min”,”Max” and “Avg”  column
+
+hive> INSERT OVERWRITE DIRECTORY '/user/hduser/cust_db/outputdir/Loc_Item_Anlz_Summ/' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' SELECT CUST_STATE AS STATE_WISE,CUST_CITY AS CITY_WISE,YEAR,ROUND(MIN(ITEM_PRICE*NO_OF_ITEM),2) AS MIN_SALE,ROUND(MAX(ITEM_PRICE*NO_OF_ITEM),2) AS MAX_SALE,ROUND(AVG(ITEM_PRICE*NO_OF_ITEM),2) AS AVG_SALE FROM SOURCEDB.TRAN_CUST_ITEM WHERE YEAR BETWEEN 2017 AND 2020 GROUP BY CUST_STATE,CUST_CITY,YEAR ORDER BY STATE_WISE,CITY_WISE,YEAR;
+Query ID = nancy_20220209162302_3042ba7a-7f37-4e8b-8775-3f4cfcc92bdd
+Total jobs = 2
+Launching Job 1 out of 2
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1644208284897_0060, Tracking URL = http://nancy:8088/proxy/application_1644208284897_0060/
+Kill Command = /home/nancy/hadoop-2.10.1/bin/hadoop job  -kill job_1644208284897_0060
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2022-02-09 16:23:07,601 Stage-1 map = 0%,  reduce = 0%
+2022-02-09 16:23:11,761 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 2.45 sec
+2022-02-09 16:23:15,840 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 4.18 sec
+MapReduce Total cumulative CPU time: 4 seconds 180 msec
+Ended Job = job_1644208284897_0060
+Launching Job 2 out of 2
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1644208284897_0061, Tracking URL = http://nancy:8088/proxy/application_1644208284897_0061/
+Kill Command = /home/nancy/hadoop-2.10.1/bin/hadoop job  -kill job_1644208284897_0061
+Hadoop job information for Stage-2: number of mappers: 1; number of reducers: 1
+2022-02-09 16:23:26,699 Stage-2 map = 0%,  reduce = 0%
+2022-02-09 16:23:30,788 Stage-2 map = 100%,  reduce = 0%, Cumulative CPU 0.91 sec
+2022-02-09 16:23:34,871 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 2.19 sec
+MapReduce Total cumulative CPU time: 2 seconds 190 msec
+Ended Job = job_1644208284897_0061
+Moving data to: /user/hduser/cust_db/outputdir/Loc_Item_Anlz_Summ
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 4.18 sec   HDFS Read: 206059 HDFS Write: 15532 SUCCESS
+Stage-Stage-2: Map: 1  Reduce: 1   Cumulative CPU: 2.19 sec   HDFS Read: 21015 HDFS Write: 11433 SUCCESS
+Total MapReduce CPU Time Spent: 6 seconds 370 msec
+OK
+Time taken: 32.985 seconds
+----------------------------------------------------------------------------------------------------------------------------------------

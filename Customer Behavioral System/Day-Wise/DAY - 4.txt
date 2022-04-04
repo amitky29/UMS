@@ -1,0 +1,179 @@
+8) In Hive create a Targetdb
+hive> create database targetdb;
+OK
+Time taken: 0.014 seconds
+--------------------------------------------------------------------------
+9)Goto Spark and process the data as per functional requirement .
+
+1) Create the Customer wise Purchase of  Item details  -Year wise- Month wise  (Name) based on Item Value wise (Product Name &
+,Customer Name).  
+Summarized Statement
+
+hive> CREATE TABLE SUMMARY(CUSTOMER_NAME STRING,PRODUCT_NAME STRING,YEAR INT,MONTH STRING,ITEM_VALUE DOUBLE,MON INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS PARQUET LOCATION '/user/hduser/cust_db/outputdir/year_month_part/';
+OK
+Time taken: 0.03 seconds
+hive> INSERT INTO SUMMARY SELECT CONCAT_WS(' ',CUST_F_NAME,CUST_L_NAME) AS CUSTOMER_NAME,ITEM_NAME,YEAR,DATE_FORMAT(TRAN_DATE,'MMMMM'),ROUND(SUM(ITEM_PRICE),2),MONTH FROM SOURCEDB.TRAN_CUST_ITEM GROUP BY CUST_F_NAME,CUST_L_NAME,ITEM_NAME,YEAR,TRAN_DATE,MONTH ORDER BY CUSTOMER_NAME,YEAR,MONTH;
+Query ID = nancy_20220209121130_3fbf1284-abea-4059-882d-ff9e1f3ea5f4
+Total jobs = 2
+Launching Job 1 out of 2
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1644208284897_0029, Tracking URL = http://nancy:8088/proxy/application_1644208284897_0029/
+Kill Command = /home/nancy/hadoop-2.10.1/bin/hadoop job  -kill job_1644208284897_0029
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2022-02-09 12:11:35,357 Stage-1 map = 0%,  reduce = 0%
+2022-02-09 12:11:39,436 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 2.47 sec
+2022-02-09 12:11:44,534 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 4.4 sec
+MapReduce Total cumulative CPU time: 4 seconds 400 msec
+Ended Job = job_1644208284897_0029
+Launching Job 2 out of 2
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1644208284897_0030, Tracking URL = http://nancy:8088/proxy/application_1644208284897_0030/
+Kill Command = /home/nancy/hadoop-2.10.1/bin/hadoop job  -kill job_1644208284897_0030
+Hadoop job information for Stage-2: number of mappers: 1; number of reducers: 1
+2022-02-09 12:11:54,906 Stage-2 map = 0%,  reduce = 0%
+2022-02-09 12:11:59,009 Stage-2 map = 100%,  reduce = 0%, Cumulative CPU 1.12 sec
+2022-02-09 12:12:04,104 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 3.38 sec
+MapReduce Total cumulative CPU time: 3 seconds 380 msec
+Ended Job = job_1644208284897_0030
+Loading data to table targetdb.summary
+Table targetdb.summary stats: [numFiles=0, numRows=1000, totalSize=0, rawDataSize=6000]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 4.4 sec   HDFS Read: 203655 HDFS Write: 69491 SUCCESS
+Stage-Stage-2: Map: 1  Reduce: 1   Cumulative CPU: 3.38 sec   HDFS Read: 75594 HDFS Write: 11029 SUCCESS
+Total MapReduce CPU Time Spent: 7 seconds 780 msec
+OK
+Time taken: 34.401 seconds
+
+--------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------
+Create External table in parquet format and insert values 
+1) Cust_Purc_Year_Mon_Summ
+hive> CREATE EXTERNAL TABLE CUST_PURC_YEAR_MON_SUMM(CUSTOMER_NAME STRING,PRODUCT_NAME STRING,YEAR INT,MONTH STRING,ITEM_VALUE DOUBLE) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS PARQUET LOCATION '/user/hduser/cust_db/outputdir/summary/CUST_PURC_YEAR_MON_SUMM/';
+OK
+Time taken: 0.036 seconds
+hive> INSERT INTO TARGETDB.CUST_PURC_YEAR_MON_SUMM SELECT CUSTOMER_NAME,PRODUCT_NAME,YEAR,MONTH,ITEM_VALUE FROM TARGETDB.SUMMARY;
+Query ID = nancy_20220209155759_4bed2fce-6009-4aa6-93b6-61103630c957
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1644208284897_0055, Tracking URL = http://nancy:8088/proxy/application_1644208284897_0055/
+Kill Command = /home/nancy/hadoop-2.10.1/bin/hadoop job  -kill job_1644208284897_0055
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2022-02-09 15:58:04,141 Stage-1 map = 0%,  reduce = 0%
+2022-02-09 15:58:08,222 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 2.15 sec
+MapReduce Total cumulative CPU time: 2 seconds 150 msec
+Ended Job = job_1644208284897_0055
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to: hdfs://localhost:9000/user/hduser/cust_db/outputdir/summary/CUST_PURC_YEAR_MON_SUMM/.hive-staging_hive_2022-02-09_15-57-59_836_8897299875992493899-1/-ext-10000
+Loading data to table targetdb.cust_purc_year_mon_summ
+Table targetdb.cust_purc_year_mon_summ stats: [numFiles=0, numRows=1000, totalSize=0, rawDataSize=5000]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 2.15 sec   HDFS Read: 15137 HDFS Write: 10377 SUCCESS
+Total MapReduce CPU Time Spent: 2 seconds 150 msec
+OK
+Time taken: 9.492 seconds
+hive> select * from CUST_PURC_YEAR_MON_SUMM;
+OK
+Aarav Tambe	Beef Wellington	2017	January	1362.0
+Aarav Tambe	Veal - Inside	2017	April	1776.0
+Aarav Tambe	Skirt - 29 Foot	2017	July	638.0
+Aarav Tambe	Bread Base - Toscano	2017	August	420.0
+Aarav Tambe	Foil - Round Foil	2017	November	1872.0
+Aarav Tambe	Beer - True North Strong Ale	2018	December	324.0
+Aarav Tambe	Water - Spring Water 500ml	2019	February	1386.0
+Aarav Tambe	Cheese - Cheddar	2020	June	600.0
+Aarav Tambe	Scotch - Queen Anne	2020	August	504.0
+Aarush Saini	Cleaner - Lime Away	2017	May	1832.0
+Aarush Saini	Cheese - Cheddar	2017	August	514.0
+Aarush Saini	Pork - Back	2017	October	778.0
+Aarush Saini	Pickerel - Fillets	2018	October	1286.0
+Aarush Saini	Fuji Apples	2019	July	86.0
+Aarush Sen	Chips - Doritos	2017	May	164.0
+Aarush Sen	Cheese - Cheddar	2017	August	514.0
+Aarush Sen	Turkey - Ground. Lean	2019	February	700.0
+Aarush Sen	Mortadella	2019	March	1122.0
+Aarush Sen	Lid Tray - 12in Dome	2019	August	1332.0
+Aarush Sen	Wine - Red	2019	August	1762.0
+Aarush Sen	Pickerel - Fillets	2020	February	1286.0
+Abdul Hazarika	Instant Coffee	2017	August	1370.0
+Abdul Hazarika	Pears - Bartlett	2018	April	1516.0
+----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+2)  Item_least_moved
+Find  overall  least moved  10  Items Value wise  Year-wise (Product Name & ,Customer Name)
+
+hive> CREATE EXTERNAL TABLE TARGETDB.ITEM_LEAST_MOVED(CUSTOMER_NAME STRING,PRODUCT_NAME STRING,SOLD_VALUE DOUBLE,YEAR INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS PARQUET LOCATION '/user/hduser/cust_db/outputdir/summary/ITEM_LEAST_MOVED/';
+OK
+Time taken: 0.023 seconds
+hive> INSERT INTO TARGETDB.ITEM_LEAST_MOVED SELECT CONCAT_WS(' ',CUST_F_NAME),ITEM_NAME,ROUND(SUM(ITEM_PRICE * NO_OF_ITEM),2), YEAR FROM SOURCEDB.TRAN_CUST_ITEM WHERE YEAR BETWEEN 2017 AND 2020 GROUP BY CUST_F_NAME,CUST_L_NAME,ITEM_NAME,'1','2','4',YEAR ORDER BY 3 LIMIT 10;
+Warning: Using constant number 3 in order by. If you try to use position alias when hive.groupby.orderby.position.alias is false, the position alias will be ignored.
+Query ID = nancy_20220209125839_ecbd8006-72da-4c17-8002-2eecf5163505
+Total jobs = 2
+Launching Job 1 out of 2
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1644208284897_0039, Tracking URL = http://nancy:8088/proxy/application_1644208284897_0039/
+Kill Command = /home/nancy/hadoop-2.10.1/bin/hadoop job  -kill job_1644208284897_0039
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2022-02-09 12:58:43,120 Stage-1 map = 0%,  reduce = 0%
+2022-02-09 12:58:48,219 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 2.42 sec
+2022-02-09 12:58:52,302 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 4.35 sec
+MapReduce Total cumulative CPU time: 4 seconds 350 msec
+Ended Job = job_1644208284897_0039
+Launching Job 2 out of 2
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1644208284897_0040, Tracking URL = http://nancy:8088/proxy/application_1644208284897_0040/
+Kill Command = /home/nancy/hadoop-2.10.1/bin/hadoop job  -kill job_1644208284897_0040
+Hadoop job information for Stage-2: number of mappers: 1; number of reducers: 1
+2022-02-09 12:59:04,107 Stage-2 map = 0%,  reduce = 0%
+2022-02-09 12:59:08,194 Stage-2 map = 100%,  reduce = 0%, Cumulative CPU 1.22 sec
+2022-02-09 12:59:13,275 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 3.47 sec
+MapReduce Total cumulative CPU time: 3 seconds 470 msec
+Ended Job = job_1644208284897_0040
+Loading data to table targetdb.item_least_moved
+Table targetdb.item_least_moved stats: [numFiles=0, numRows=10, totalSize=0, rawDataSize=40]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 4.35 sec   HDFS Read: 204705 HDFS Write: 54031 SUCCESS
+Stage-Stage-2: Map: 1  Reduce: 1   Cumulative CPU: 3.47 sec   HDFS Read: 59860 HDFS Write: 1005 SUCCESS
+Total MapReduce CPU Time Spent: 7 seconds 820 msec
+OK
+Time taken: 34.777 seconds
+hive> SELECT * FROM ITEM_LEAST_MOVED;
+OK
+Zehaan  Rabbit - Whole  18766.0 2017
+Zehaan	Pie Shell - 9	81130.0	2018
+Zehaan	Pears - Bartlett	142504.0	2017
+Zehaan	Pasta - Cappellini	25724.0	2018
+Zehaan	Onions - Cippolini	36120.0	2019
+Zehaan	Food Colouring - Blue	165870.0	2018
+Zehaan	Cheese - St. Andre	43028.0	2017
+Zehaan	Beef - Bresaola	11508.0	2017
+Zehaan	Squid - U 5	59432.0	2017
+Zehaan	Slt - Individual Portions	25480.0	2018
+Time taken: 0.034 seconds, Fetched: 10 row(s)
+-------------------------------------------------------------------------------------------------------------------------------------------------------

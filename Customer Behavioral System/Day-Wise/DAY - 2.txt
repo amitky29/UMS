@@ -1,0 +1,333 @@
+2) 
+Create a  local directory in  Cloudera Clone with name  Sourcelocal and  maintain all Customers, Branch and  CSV files
+mkdir sourcelocal;
+---------------------------------------------------------------------------------
+3)In  Hive  create Sourcedb
+hive> create database sourcedb;
+OK
+Time taken: 0.296 seconds
+-------------------------------------------------
+-------------------------------------------------
+hive> show databases;
+OK
+default
+sourcedb
+Time taken: 0.29 seconds, Fetched: 3 row(s)
+-------------------------------------------------
+-------------------------------------------------
+hive> use sourcedb;
+OK
+Time taken: 0.019 seconds
+
+-------------------------------------------------------------------------------------------
+4) In Hive Sourcedb, Create Managed tables for  Customers, Item
+
+hive> CREATE TABLE ITEM(ITEM_CODE INT,ITEM_NAME STRING,ITEM_PRICE INT)ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE;
+OK
+Time taken: 0.101 seconds
+
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+
+hive> CREATE TABLE CUSTOMER(CUST_ID INT,CUST_F_NAME STRING,CUST_M_NAME STRING,CUST_L_NAME STRING,CUST_SSN INT,CUST_STREET STRING,CUST_CITY STRING,CUST_STATE STRING,CUST_COUNTRY STRING,CUST_ZIP INT,CUST_PHONE INT,CUST_EMAIL STRING)ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE;
+OK
+Time taken: 0.126 seconds
+
+------------------------------------------------------------------------------------------
+5) Load  respective item 2  CSV files into item 4 tables
+
+hive> load data local inpath '/home/nancy/sourcelocal/ITEM.csv' into table ITEM;
+Loading data to table sourcedb.item
+Table sourcedb.item stats: [numFiles=1, totalSize=3601]
+OK
+Time taken: 0.651 seconds
+hive> SELECT * FROM ITEM;
+OK
+1	Pear - Asian	15
+2	Chips - Doritos	82
+3	Cabbage - Savoy	22
+4	Longos - Assorted Sandwich	386
+5	Pork - Loin	77
+6	Peach - Halves	678
+7	Oven Mitts 17 Inch	872
+8	Slt - Individual Portions	196
+9	Sambuca Cream	741
+10	Paste - Black Olive	968
+11	Mince Meat - Filling	474
+12	Veal - Inside	888
+13	Lid Tray - 12in Dome	666
+14	Pasta - Orzo	147
+15	Curry Powder	910
+16	Rice - Brown	750
+17	Lamb - Whole	687
+18	Bread Base - Toscano	210
+19	Cheese - St. Andre	694
+20	Apple - Custard	419
+21	Puree - Mocha	69
+22	Instant Coffee	685
+23	Foil - Round Foil	936
+24	Venison - Striploin	498
+25	Beer - True North Strong Ale	162
+26	Marzipan 50/50	181
+27	Hipnotiq Liquor	881
+28	Coke - Diet	426
+29	Onions - Cippolini	301
+30	Pepper - Chilli Seeds Mild	540
+31	Wine - White	745
+32	Skirt - 29 Foot	319
+33	Soup - Campbells	449
+34	Cake Sheet Combo Party Pack	177
+35	Bread - Pita	994
+36	Cheese - Cheddarsliced	652
+37	Beer - Heinekin	939
+38	Truffle Shells - White Chocolate	610
+39	Allspice - Jamaican	350
+40	Pie Shell - 9	427
+41	Sauce - Vodka Blush	289
+42	Island Oasis - Strawberry	843
+43	Rice - Jasmine Sented	211
+44	Wine - Pinot Noir Latour	977
+45	Cheese - Cheddar	257
+46	Rum - Light	681
+47	Ezy Change Mophandle	723
+48	Flounder - Fresh	971
+49	Sage Ground Wiberg	321
+50	Fuji Apples	43
+51	Squid - U 5	391
+52	Lamb - Loin Chops	676
+53	Bread - Malt	82
+54	Chicken - Whole	856
+55	Strawberries	180
+56	Wine - Red	881
+57	Graham Cracker Mix	301
+58	Scotch - Queen Anne	252
+59	Pear - Prickly	742
+60	Beef Wellington	681
+61	Turkey - Ground. Lean	350
+62	Shrimp - 150 - 250	70
+63	Bread - Pumpernickel	389
+64	Shrimp - Baby	574
+65	Beef Wellington	888
+66	Vaccum Bag 10x13	145
+67	Anchovy Paste - 56 G Tube	578
+68	Wine - Chianti Classica Docg	132
+69	Cheese - Cheddar	300
+70	Beef - Rouladin	104
+71	French Pastries	542
+72	Food Colouring - Green	847
+73	Pepper - Paprika	849
+74	Lemon Pepper	736
+75	Wine - Rioja Campo Viejo	470
+76	Wine - Magnotta - Cab Sauv	875
+77	Rabbit - Whole	853
+78	Beef - Bresaola	137
+79	Pasta - Cappellini	218
+80	Yogurt - Banana	647
+81	Gherkin - Sour	516
+82	Pork - Back	389
+83	The Pop Shoppe - Lime Rickey	320
+84	Wine - Acient Coast Caberne	377
+85	Coffee Cup 12oz 5342cd	300
+86	Bar Bran Honey Nut	564
+87	Sauce - White	225
+88	Scallops - U - 10	635
+89	Sage - Ground	183
+90	Lamb - Pieces	374
+91	Bread - Raisin Walnut Pull	607
+92	Food Colouring - Blue	855
+93	Wine - Rhine Riesling Wolf Blass	40
+94	Amaretto	89
+95	Ecolab - Orange Frc	101
+96	Coffee - Frthy Coffee Crisp	659
+97	Dome Lid Clear P92008h	771
+98	Pepper - Black	700
+99	Split Peas - Yellow	802
+100	Beef Dry Aged Tenderloin Aaa	362
+101	Mortadella	561
+102	Eggroll	171
+103	Pastry - Baked Scones - Mini	57
+104	Cleaner - Lime Away	916
+105	Water - Spring Water 500ml	693
+106	Pasta - Penne	950
+107	Bread - Pumpernickel	615
+108	Lid - 16 Oz And 32 Oz	261
+109	Wine - Touraine Azay - Le - Rideau	345
+110	Lamb - Ground	281
+111	Transfer Sheets	521
+112	Crackers - Soda / Saltins	91
+113	Lotus Rootlets - Canned	449
+114	Bread - Raisin Walnut Oval	167
+115	Lobster - Cooked	432
+116	Soupfoamcont12oz 112con	328
+117	Pickerel - Fillets	643
+118	Pears - Bartlett	758
+119	Lettuce - Romaine	455
+120	Nacho Chips	353
+Time taken: 0.095 seconds, Fetched: 121 row(s)
+
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+
+hive> load data local inpath '/home/nancy/sourcelocal/CUSTOMER.csv' into table CUSTOMER;
+Loading data to table sourcedb.customer
+Table sourcedb.customer stats: [numFiles=1, totalSize=14836]
+OK
+Time taken: 0.196 seconds
+hive> SELECT * FROM CUSTOMER;
+OK
+1	Aarush	Kumar	Saini	466850019	56	Gurugram	Haryana	India	461290	NULL	qdooney0@51.la
+2	Upkaar		Arora	633221265	54	Jalandar	Punjab	India	884220	NULL	gfairburne1@comsenz.com
+3	Ansh		Shah	854801076	85	Nalanda	Bihar	India	976231	NULL	mmatuszkiewicz2@desdev.cn
+4	Harish		Menon	120481493	68	Itanagar	Arunachal Pradesh	India	429966	1255121422	sgert3@t-online.de
+5	Mitesh		Kapoor	437229117	94	Agartala	Tripura	India	397593	1221047615	npinke4@studiopress.com
+6	Baljiwan		Guha	284454500	23	Raipur	Chhattisgarh	India	468469	NULL	bfucher5@dailymotion.com
+7	Naveen		Chaturvedi	580896446	71	Bhopal	Madhya Pradesh	India	455414	NULL	rmandres6@washington.edu
+8	Gautam		Roy	252984327	47	Srinagar	Jammu and Kashmir	India	804585	NULL	ccawthry7@360.cn
+9	Champak	Lal	Acharya	737983104	27	Itanagar	Arunachal Pradesh	India	598484	NULL	swrenn8@amazon.com
+10	Jatin		Rangan	659187513	86	Gandhinagar	Gujarat	India	492644	NULL	egoolden9@wp.com
+11	Aarav		Tambe	117895191	76	Patna	Bihar	India	795480	NULL	amaggiorea@ox.ac.uk
+12	Brijesh		Subramaniam	670813065	31	Agartala	Tripura	India	458221	NULL	bstolbergb@webeden.co.uk
+13	Siddharth		Sengupta	803488959	50	Bhopal	Madhya Pradesh	India	109118	NULL	mmulcahyc@instagram.com
+14	Vedant		Bhatnagar	440034091	16	Visakhapatnam	Andhra Pradesh	India	620766	NULL	minglesantd@csmonitor.com
+15	Shaurya		Mitra	898262325	70	Panaji	Goa	India	805244	NULL	elejeane@google.com.br
+16	Yagnesh		Bhattacharya	591266906	57	Kochi	Kerala	India	925165	NULL	bdudleyf@virginia.edu
+17	Balendra		Arora	692238805	97	Kochi	Kerala	India	807144	NULL	ehantong@japanpost.jp
+18	Rushil		Sarin	796779737	53	Kanpur	Uttar Pradesh	India	500650	NULL	ahorburghh@ehow.com
+19	Onveer		Das	646327456	12	Gangtok	Sikkim	India	130883	NULL	bwakelyi@nba.com
+20	Lakshay		Jayaraman	587565203	28	Warangal	Telangana	India	506681	NULL	jhaughanj@go.com
+21	Dev		Saxena	316457262	98	Imphal	Manipur	India	560817	NULL	gchasmoork@plala.or.jp
+22	Arjun		Rodrigues	252109697	69	Kohima	Nagaland	India	458387	NULL	mrodliffl@google.es
+23	Harshil		Tambe	231314399	48	Ambala	Haryana	India	664564	1001535423	jmighelim@upenn.edu
+24	Shivansh	Raj 	Kapoor	663683984	16	Vellore	Tamil Nadu	India	583286	NULL	kfludgaten@tripadvisor.com
+25	Chandran	Raj 	Gupta	456757047	84	Cuttack	Odisha	India	921552	NULL	cstarkeyo@about.me
+26	Wahab		Rangarajan	692057126	41	Kohima	Nagaland	India	748507	NULL	msheachp@shareasale.com
+27	Ranveer		Chowdhury	219566145	96	Thoubal	Manipur	India	993698	NULL	amarkosq@1688.com
+28	Jatin		Acharya	409175892	74	Leh	Jammu and Kashmir	India	477519	NULL	bmciverr@dell.com
+29	Laban	Kumar	Acharya	603852546	59	Warangal	Assam	India	308684	NULL	hflounderss@apple.com
+30	Jason		Bose	873762644	91	Mandi	Himachal Pradesh	India	322516	NULL	ctrowert@wordpress.com
+31	Baljiwan		D’Costa	484681533	89	Srinagar	Jammu and Kashmir	India	995218	NULL	mdalstonu@twitpic.com
+32	Rayaan		Rai	816332990	60	Coimbatore	Tamil Nadu	India	719404	NULL	ccarlv@bravesites.com
+33	Hardik		Sarkar	592579913	42	Ahmedabad	Gujarat	India	885492	NULL	tcurtainw@tinypic.com
+34	Arjun		Chaturvedi	516190622	32	Bhilai	Chhattisgarh	India	606365	NULL	vcopcottx@taobao.com
+35	Darsh		Kalita	855800792	61	Gangtok	Sikkim	India	325440	NULL	sgrinvaly@tumblr.com
+36	Daksh		Narayan	473139185	22	Kota	Rajasthan	India	845190	NULL	bwaghornez@google.ru
+37	Warinder		Pradhan	527167087	59	Itanagar	Arunachal Pradesh	India	802000	NULL	shallett10@photobucket.com
+38	Gautam		Kadam	286187946	54	Ranchi	Jharkhand	India	426436	1035338533	shugnin11@dropbox.com
+39	Gautam		Nair	372381704	25	Agartala	Tripura	India	403201	NULL	sbolderoe12@smugmug.com
+40	Samar		Patil	781899456	58	Panaji	Goa	India	140350	NULL	mbolsteridge13@prnewswire.com
+41	Rohan		Mandal	484233210	21	Nalanda	Bihar	India	698768	1437677370	mhulks14@constantcontact.com
+42	Zehaan		Tandon	885520461	14	Lucknow	Uttar Pradesh	India	651157	1665280831	kmercy15@microsoft.com
+43	Veer		Chavan	306358914	26	Buxar	Bihar	India	588243	NULL	mmalt16@bloglovin.com
+44	Chatresh		Hazarika	530250345	32	Itanagar	Arunachal Pradesh	India	533071	NULL	abramwell17@europa.eu
+45	Abdul		Hazarika	845031784	31	Pune	Maharashtra	India	877907	NULL	ptownend18@goo.ne.jp
+46	Girik		Jain	453969397	22	Jamshedpur	Jharkhand	India	268881	NULL	mgilford19@ow.ly
+47	Frado		Buruah	657175415	78	Warangal	Telangana	India	911705	NULL	kcavilla1a@liveinternet.ru
+48	Girish		Sarin	714464366	47	Varanasi	Uttarakhand	India	200955	NULL	fredsall1b@printfriendly.com
+49	Dakshesh		Mazumdar	858488592	50	Bhubaneswar	Odisha	India	227343	NULL	ajuanico1c@intel.com
+50	Madhav		Gurung	729396319	91	Siliguri	West Bengal	India	713865	1985066112	mrossbrooke1d@newyorker.com
+51	Jagdish	Kumar	Singh	107724350	62	Agra	Uttarakhand	India	839641	NULL	fengelbrecht1e@altervista.org
+52	Utkarsh		Chopra	802943676	67	Amritsar	Punjab	India	684404	1107633363	chandover1f@newyorker.com
+53	Madhav		Roy	802664031	83	Kohima	Nagaland	India	706618	NULL	vglave1g@delicious.com
+54	Shaurya		Guha	113604998	57	Jammu	Jammu and Kashmir	India	596966	NULL	rgiorgione1h@msn.com
+55	Arnav		Chopra	601076779	92	Gurugram	Haryana	India	752410	NULL	sberks1i@wix.com
+56	Warjas		Jain	755082301	76	Munnar	Kerala	India	900109	NULL	mbucknell1j@reuters.com
+57	Manan		Rai	217715982	84	Itanagar	Arunachal Pradesh	India	480410	NULL	mcomben1k@slashdot.org
+58	Yatan		Reddy	285822359	41	Bhubaneswar	Odisha	India	686758	NULL	ubamell1l@ezinearticles.com
+59	Gaurang		Das	186789808	92	Udaipur	Rajasthan	India	368380	NULL	mmahomet1m@scientificamerican.com
+60	Wahab		Verma	738737312	96	Jalandar	Punjab	India	578172	NULL	cfilintsev1n@hibu.com
+61	Pranit		Patil	884377970	45	Patna	Bihar	India	718240	2099178499	apayle1o@google.com.au
+62	Fitan		Mehta	654365476	100	Leh	Jammu and Kashmir	India	553300	NULL	sjzak1p@sbwire.com
+63	Ayushman		Ahuja	662445063	81	Lucknow	Uttar Pradesh	India	568542	1209689473	hmocker1q@wordpress.org
+64	Vivaan		Pillai	875605300	55	Noida	Uttar Pradesh	India	415411	NULL	rkirsop1r@harvard.edu
+65	Wazir		Ahluwalia	259418743	92	Gangtok	Sikkim	India	420766	1196295549	bstango1s@msn.com
+66	Om		Bharadwaj	677372935	73	Rajkot	Gujarat	India	545306	NULL	pspeke1t@ft.com
+67	Laban		Jain	114018129	21	Kanpur	Uttar Pradesh	India	833744	1015942493	amcmakin1u@tinyurl.com
+68	Ekapad		Mandal	611671130	50	Gurugram	Haryana	India	991730	NULL	cwenderott1v@domainmarket.com
+69	Shaurya		D’souza	741630452	23	Warangal	Assam	India	900103	1965031153	gevershed1w@studiopress.com
+70	Lohit		Acharya	820618425	90	Chennai 	Tamil Nadu	India	751058	NULL	sdelacourt1x@360.cn
+71	Dhruv		Kapoor	382994294	100	Jammu	Jammu and Kashmir	India	414433	NULL	efeatherby1y@narod.ru
+72	Naksh		Mehra	317435377	47	Mumbai	Maharashtra	India	382929	NULL	gkrienke1z@desdev.cn
+73	Lakshit		Patil	351094809	52	Vadodara	Gujarat	India	970160	1648031408	killing20@sphinn.com
+74	Kiaan		Rai	389837274	100	Amritsar	Punjab	India	674251	NULL	doheneghan21@webnode.com
+75	Sai		Ahluwalia	814166610	14	Bokaro	Jharkhand	India	707948	NULL	schetwynd22@cpanel.net
+76	Nakul		Kaul	325891264	42	Agra	Uttarakhand	India	477262	NULL	kwhittet23@com.com
+77	Aarush		Sen	391686861	49	Warangal	Telangana	India	521421	NULL	rshilstone24@bluehost.com
+78	Neel		Ahluwalia	130979311	40	Panipat	Haryana	India	129358	NULL	kdallywater25@artisteer.com
+79	Ekbal		Roy	784095741	73	Jaipur	Rajasthan	India	797796	NULL	lmckniely26@usatoday.com
+80	Yatin		Chaturvedi	817715300	18	Buxar	Bihar	India	659180	NULL	colman27@un.org
+81	Samesh	Kumar	Acharya	513261958	59	Visakhapatnam	Andhra Pradesh	India	693079	NULL	tcroughan28@yale.edu
+82	Akshay		Singh	654115658	34	Itanagar	Arunachal Pradesh	India	242347	NULL	gdreger29@oracle.com
+83	Anirudh		Deshpande	271928398	75	Aizawal	Mizoram	India	272388	1685291559	rbolino2a@yahoo.co.jp
+84	Praneel		D’souza	775943782	38	Agartala	Tripura	India	428927	NULL	dbowery2b@berkeley.edu
+85	Chaitanya		Kaul	162640669	68	Raipur	Chhattisgarh	India	573542	NULL	gburgen2c@toplist.cz
+86	Qasim		Khan	694679312	33	Jowai	Meghalaya	India	156299	NULL	csnape2d@sfgate.com
+87	Zashil		Jayaraman	543917648	59	Shillong	Meghalaya	India	816187	NULL	bwayper2e@columbia.edu
+88	Azad		Chavan	285304567	91	Nalanda	Bihar	India	446458	NULL	tolennachain2f@newsvine.com
+89	Gagan		Kadam	662107800	33	Ranchi	Jharkhand	India	372849	NULL	jagastina2g@earthlink.net
+90	Chaitanya		Pawar	891645011	10	Kolkata	West Bengal	India	251677	NULL	logaven2h@craigslist.org
+91	Akshay		Jain	416969846	69	Panaji	Goa	India	225784	NULL	lsetchell2i@globo.com
+92	Gopal		Dutta	589549254	54	Srinagar	Jammu and Kashmir	India	649408	NULL	mmanger2j@cbsnews.com
+93	Zehaan		Mitra	263348697	12	Kolkata	West Bengal	India	893115	NULL	elauthian2k@umn.edu
+94	Vihaan		Banerjee	340182970	55	Itanagar	Arunachal Pradesh	India	409647	1727444643	hdymond2l@salon.com
+95	Tanmay	Kumar	Bhat	681133815	96	Aizawal	Mizoram	India	296225	NULL	csearjeant2m@vinaora.com
+96	Brijesh		Chakraborty	271286288	29	Mumbai	Maharashtra	India	788975	NULL	hbownas2n@blinklist.com
+97	Mohammed		Kalita	716915146	88	Jalandar	Punjab	India	986574	NULL	trackam2o@virginia.edu
+98	Ayush		Tamang	617263898	10	Mumbai	Maharashtra	India	655200	1869616418	dabdie2p@yale.edu
+99	Udant		Ahuja	251325688	91	Mumbai	Maharashtra	India	168706	NULL	bgedney2q@umich.edu
+100	Zashil		Balasubramanium	448029941	61	Bhubaneswar	Odisha	India	365237	NULL	ecallam2r@prlog.org
+101	Chanakya		Venkatesan	857263930	11	Nalanda	Bihar	India	665495	NULL	dbauman2s@jalbum.net
+102	Onveer		Buruah	529869622	25	Itanagar	Arunachal Pradesh	India	124704	NULL	jtimothy2t@washington.edu
+103	Fariq	Alam	Sharif	191117813	26	Surat	Gujarat	India	793928	NULL	acrowch2u@ning.com
+104	Baljiwan		Menon	433706226	20	Shimla	Himachal Pradesh	India	955632	NULL	frosenvasser2v@csmonitor.com
+105	Jagdish		Shah	498919950	43	Gurugram	Haryana	India	247996	NULL	cstandbrook2w@fotki.com
+106	Pranit		Chettri	840410224	58	Guwahati	Assam	India	182280	NULL	jleicester2x@foxnews.com
+107	Neel		Hazarika	733257507	10	Kochi	Kerala	India	399984	NULL	mmcffaden2y@businessinsider.com
+108	Umang		Sarin	869722302	25	Srinagar	Jammu and Kashmir	India	688197	NULL	cisakovitch2z@lycos.com
+109	Om		Chopra	487324748	36	Ambala	Haryana	India	584889	NULL	cprandoni30@storify.com
+110	Orinder		Mukherjee	788036307	42	Itanagar	Arunachal Pradesh	India	968089	NULL	tfontin31@columbia.edu
+111	Hemang		Mazumdar	856947539	53	Srinagar	Jammu and Kashmir	India	500719	NULL	fsein32@gmpg.org
+112	Harsh		Malhotra	891512165	36	Visakhapatnam	Andhra Pradesh	India	813577	NULL	grossborough33@unicef.org
+113	Jagat	Krishna	Reddy	103557944	75	Shimla	Himachal Pradesh	India	553687	NULL	hklaiser34@businesswire.com
+114	Zayyan		Malik	685480281	65	Dimapur	Nagaland	India	805243	NULL	fpoulsom35@sourceforge.net
+115	Maanav		Subramaniam	760820160	92	Panipat	Haryana	India	246842	NULL	lbrimilcombe36@fotki.com
+116	Ekaraj		Rai	231508335	21	Dimapur	Nagaland	India	293742	NULL	dkeiling37@webnode.com
+117	Ishwar		Saini	640501159	25	Surat	Gujarat	India	376694	NULL	cingledow38@dedecms.com
+118	Naksh		Kalita	691079111	16	Rourkela	Odisha	India	622854	NULL	mfawlkes39@hp.com
+119	Nihal	Das	Gupta	865384361	16	Nalanda	Bihar	India	506889	NULL	vcarlucci3a@blogs.com
+120	Zehaan		Das	892987185	84	Bengaluru	Karnataka	India	326923	NULL	beasey3b@dell.com
+121	Veer		Dutta	818207682	73	Imphal	Manipur	India	223305	NULL	mcuerda3c@devhub.com
+122	Praneel		Rodrigues	847437147	96	Shillong	Meghalaya	India	801699	NULL	koduggan3d@sina.com.cn
+123	Ajeet		Saini	551510387	89	Dawki	Meghalaya	India	368968	NULL	lobeirne3e@icq.com
+124	Kalpit		Chavan	771740416	61	Dhanbad	Jharkhand	India	682465	NULL	rpickersail3f@cbslocal.com
+125	Saksham		Chettri	849531062	36	Mandi	Himachal Pradesh	India	893745	NULL	wviall3g@wikia.com
+126	Balhaar		Bhattacharya	120659828	52	Amaravati	Andhra Pradesh	India	611197	NULL	ktrowle3h@printfriendly.com
+127	Umang		Thapa	562350233	65	Manali	Himachal Pradesh	India	186748	NULL	swilby3i@symantec.com
+128	Ekbal		Pillai	707717744	88	Rourkela	Odisha	India	264674	NULL	rphair3j@php.net
+129	Samaksh		Singh	605803813	16	Jammu	Jammu and Kashmir	India	510498	NULL	sspreadbury3k@berkeley.edu
+130	Wridesh		Nair	145696067	70	Kohima	Nagaland	India	740163	NULL	wgiacovelli3l@goodreads.com
+131	Nitesh	Kumar	Mehta	292824907	65	Chennai 	Tamil Nadu	India	596207	NULL	efrise3m@blogspot.com
+132	Qabil	Ahmed	Sarfaraz	846135210	20	Mumbai	Maharashtra	India	493616	NULL	rortells3n@simplemachines.org
+133	Wahab		Jayaraman	483691606	87	Amritsar	Punjab	India	929137	NULL	kclerk3o@eepurl.com
+134	Krishna		Gavde	188328537	35	Warangal	Telangana	India	342435	NULL	hdewan3p@bluehost.com
+135	Udant		Mehta	595933223	25	Jamshedpur	Jharkhand	India	399831	NULL	bshmyr3q@ucoz.com
+136	Gautam		Nath	267709982	31	Shillong	Meghalaya	India	753336	NULL	afrenchum3r@answers.com
+137	Zaid		Arora	749049713	13	Surat	Gujarat	India	530218	NULL	kduberry3s@berkeley.edu
+138	Krishna		Nath	490640544	96	Lucknow	Uttar Pradesh	India	471805	NULL	xborrie3t@instagram.com
+139	Maanas		Gurung	241358604	31	Ahmedabad	Gujarat	India	518816	NULL	sspir3u@cam.ac.uk
+140	Chakradev		Saha	751623607	38	Shimla	Himachal Pradesh	India	146962	NULL	jbartomieu3v@reuters.com
+141	Zayyan		Sarin	577741380	94	Ranchi	Jharkhand	India	874493	NULL	lsibylla3w@163.com
+142	Ryan		Gupta	307981554	53	Panaji	Goa	India	652423	1838127352	soxborrow3x@lulu.com
+143	Lakshay		Acharya	469178732	48	Pune	Maharashtra	India	216130	NULL	sdametti3y@go.com
+144	Agastya	Sri	Subramaniam	638891955	73	Amaravati	Andhra Pradesh	India	110905	NULL	kreburn3z@wix.com
+145	Nihal		Chettri	454566311	85	Patna	Bihar	India	394363	NULL	acolhoun40@businessinsider.com
+146	Wridesh		Khatri	861014826	19	Warangal	Telangana	India	163964	NULL	mrichemont41@sohu.com
+147	Ojas		Roy	781848223	75	Ambala	Haryana	India	723059	1829931532	bmurcutt42@cbslocal.com
+148	Vihaan		Saini	782290270	12	Dispur	Assam	India	385094	NULL	jmowen43@digg.com
+149	Rehaan		Hassan	297599124	71	Rohtak	Haryana	India	449159	NULL	ppau44@blinklist.com
+150	Anirudh		Gurung	539294205	84	Kohima	Nagaland	India	450294	NULL	npatient45@ihg.com
+Time taken: 0.083 seconds, Fetched: 151 row(s)
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
